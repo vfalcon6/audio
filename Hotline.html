@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kansei Dorifto dot html</title>
+    <link href="Hotline.css" rel="stylesheet" type="text/css">
+</head>
+<body class="a">
+    <div class="b">
+        <div class="cover">
+            <img src="img/cover.png" style="width: 50%">
+        </div>
+        <h2 class="subtitle">First Stage Soundtrack</h2>
+        <p class="text">Initial D is a Street Racing manga created by Shuichi Shigeno in 1995,<br>and later adapted to anime in 1998. It would gain a cult following<br>not only thanks to the animation being impressive at the time,<br>but more importantly its Eurobeat soundtrack, a genre of music<br>caracterized for being very fast-paced and high-energy.</p>
+        <div class="ost">
+            <audio id="audio" preload="auto" tabindex="1" controls="">
+                <source src="audio/Around The World.mp3">
+            </audio>
+                <ul id="playlist">
+                    <li class="active">
+                        <a id="track" href="audio/Around The World.mp3">Around The World</a>
+                    </li>
+                    <li>
+                        <a id="track" href="audio/Dancing.mp3">Dancing</a>
+                    </li>
+                    <li>
+                        <a id="track" href="audio/Deja Vu.mp3">Deja Vu</a>
+                    </li>
+                    <li>
+                        <a id="track" href="audio/Don't Stop The Music.mp3">Don't Stop The Music</a>
+                    </li>
+                    <li>
+                        <a id="track" href="audio/I Need Your Love.mp3">I Need Your Love</a>
+                    </li>
+                    <li>
+                        <a id="track" href="audio/Killing my Love.mp3">Killing My Love</a>
+                    </li>
+                    <li>
+                        <a id="track" href="audio/Love Is In Danger.mp3">Love Is In Danger</a>
+                    </li>
+                    <li>
+                        <a id="track" href="audio/Make My Day.mp3">Make My Day</a>
+                    </li>
+                    <li>
+                        <a id="track" href="audio/Night Of Fire.mp3">Night Of Fire</a>
+                    </li>
+                    <li>
+                        <a id="track" href="audio/Remember Me.mp3">Remember Me</a>
+                    </li>
+                    <li>
+                        <a id="track" href="audio/Save Me.mp3">Save Me</a>
+                    </li>
+                    <li>
+                        <a id="track" href="audio/You're Gonna Be.mp3">You're Gonna Be</a>
+                    </li>
+                </ul>
+            </audio>
+        </div>
+        <script>
+            init();
+
+            function init()
+            {
+                var audio = document.getElementsById('audio');
+                var playlist = document.getElementsById('playlist');
+                var tracks = playlist.getElementsById('track');
+                audio.volume = 0.10;
+                audio.play();
+                
+                for(var track in tracks) {
+                    var link = tracks[track];
+                    if(typeof link === "function" || typeof link === "number") continue;
+                    link.addEventListener('click', function(e) {
+                        e.preventDefault();
+                        var song = this.getAttribute('href');
+                        run(song, audio, this);
+                    });
+                    }
+                    //agregamos evento para reproducir la siguiente canción en la lista
+                    //si la canción es la ultima reproducir la primera otra vez
+                    audio.addEventListener('ended',function(e) {
+                        for(var track in tracks) {
+                        var link = tracks[track];
+                        var nextTrack = parseInt(track) + 1;
+                        if(typeof link === "function" || typeof link === "number") continue;
+                        if(!this.src) this.src = tracks[0];
+                        if(track == (tracks.length - 1)) nextTrack = 0;
+                                                    console.log(nextTrack);
+                            if(link.getAttribute('href') === this.src) {
+                            var nextLink = tracks[nextTrack];
+                            run(nextLink.getAttribute('href'), audio, nextLink);
+                            break;
+                        }
+                        }
+                    });
+                }
+
+                function run(song, audio, link){
+                        var parent = link.parentElement;
+                        //quitar el active de todos los elementos de la lista
+                        var items = parent.parentElement.getElementsByTagName('li');
+                        for(var item in items) {
+                        if(items[item].classList)
+                            items[item].classList.remove("active");
+                        }
+                        
+                        //agregar active a este elemento
+                        parent.classList.add("active");
+                        
+                        //tocar la cancion
+                        audio.src = song;
+                        audio.load();
+                        audio.play();
+                }
+        </script>
+    </div>
+</body>
+</html>
